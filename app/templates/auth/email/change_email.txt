@@ -1,0 +1,12 @@
+Dear {{ user.username }},
+
+Welcome to Flasky!
+
+To confirm your new email address please click on the following link:
+{{ url_for('auth.confirm_new_email', token=token, _external=True) }}
+
+Sincerely,
+
+The Flasky Team
+
+Note: this is an automated email, please do not reply!

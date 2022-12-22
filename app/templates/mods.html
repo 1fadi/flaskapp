@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+
+{% block title %}Flasky - Moderators{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Moderators</h1>
+</div>
+<ul class="users">	
+	{% for mod in mods %}
+		<li class="user">
+			<div class="user-thumbnail">
+				<a href="{{ url_for('main.user', username=mod.username) }}">
+					<img class="img-circle"
+						 src="{{ mod.gravatar(size=40) }}">
+				</a>
+				<a href="{{ url_for('main.user', username=mod.username) }}">
+					{{ mod.username }}
+				</a>
+			</div>
+		</li>
+	{% endfor %}
+</ul>
+{% if pagination %}
+<div class="pagination">
+	{{ macros.pagination_widget(pagination, 'moderate.list_mods') }}
+</div>
+{% endif %}
+{% endblock %}

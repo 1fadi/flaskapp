@@ -1,0 +1,3 @@
+-r common.txt
+Faker==15.1.1
+selenium==4.7.1

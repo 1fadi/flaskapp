@@ -1,0 +1,47 @@
+<ul class="comments">
+	{% for comment in comments %}
+	<li class="comment" id="{{ comment.id }}">
+		<div class="vote-section">
+			<div class="fa fa-caret-up fa-2x upvote vote-btn" style="{% if current_user.vote_status(comment) == 'UP' %}color:#c64600{% endif %}" id="{{ comment.id }}"></div>
+			<div id="comment{{ comment.id }}vote-count">{{ comment.vote_count }}</div>
+			<div class="fa fa-caret-down fa-2x downvote vote-btn" style="{% if current_user.vote_status(comment) == 'DOWN' %}color:#003399{% endif %}"id="{{ comment.id }}"></div>
+		</div>
+		<div class="comment-thumbnail">
+			<a href="{{ url_for('main.user', username=comment.author.username) }}">
+				<img class="img-circle profile-thumbnail" src="{{ comment.author.gravatar(size=40) }}">
+			</a>
+		</div>
+		<div class="comment-content">
+			<div class="comment-date">{{ moment(comment.timestamp).fromNow() }}</div>
+			<div class="comment-author"><a href="{{ url_for('main.user', username=comment.author.username) }}">{{ comment.author.username }}</a></div>
+			<div class="comment-body">
+				{% if comment.disabled %}
+				<p><i>This comment has been disabled by a mod.</i></p>
+				{% endif %}
+				{% if moderate or not comment.disabled %}
+					{% if comment.body_html %}
+						{{ comment.body_html | safe }}
+					{% else %}
+						{{ comment.body }}
+					{% endif %}
+				{% endif %}
+			</div>
+			{% if comment.author == current_user %}
+			<br>
+			<a href="{{ url_for('main.edit_comment', post_id=comment.post_id, id=comment.id, page=request.args.get('page')) }}" class="btn btn-default btn-xs">Edit</a>
+			<a href="{{ url_for('main.delete_comment', id=comment.id) }}" class="btn btn-danger btn-xs">Delete</a>
+			{% endif %}
+			{% if moderate %}
+				<br>
+				{% if comment.disabled %}
+					<a class="btn btn-default btn-xs" href="{{ url_for('moderate.moderate_enable',
+						id=comment.id, page=page) }}">Enable</a>
+				{% else %}
+					<a class="btn btn-danger btn-xs" href="{{ url_for('moderate.moderate_disable',
+						id=comment.id, page=page) }}">Disable</a>
+				{% endif %}
+			{% endif %}
+		</div>
+	</li>
+	{% endfor %}
+</ul>

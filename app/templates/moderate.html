@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+
+{% block title %}Flasky - Comment Moderation{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Comment Moderation</h1>
+</div>
+{% set moderate = True %}
+<div class="post-tabs">
+    <ul class="nav nav-tabs">
+        <li{% if not comments_24h %} class="active"{% endif %}><a href="{{ url_for('.all_comments') }}">All</a></li>
+        <li{% if comments_24h %} class="active"{% endif %}><a href="{{ url_for('.show_comments_24h') }}">last 24 hours</a></li>
+    </ul>
+	{% include '_comments.html' %}
+</div>
+{% if pagination %}
+<div class="pagination">
+	{{ macros.pagination_widget(pagination, 'moderate._moderate') }}
+</div>
+{% endif %}
+{% endblock %}
